@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>起源座·两仪 积分空投计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rule-box, .tip-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tip-box {
+            background-color: #fff8e8;
+            border-left: 5px solid #ffb74d;
+        }
+
+        .rule-box h3, .tip-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-box p, .tip-box p {
+            color: #34495e;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 6px 0;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .item-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .score-tag {
+            background-color: #1a2a6c;
+            color: white;
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffd343;
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #ffc107;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .count-input {
+            width: 80px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .result-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #34495e;
+            font-size: 16px;
+        }
+
+        .result-value {
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .extra-score{
+            color:#27ae60;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #ee5253;
+        }
+
+        .calc-btn {
+            background-color: #1dd1a1;
+            color: white;
+        }
+
+        .calc-btn:hover {
+            background-color: #10ac84;
+        }
+
+        @media (max-width: 600px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>【两仪座】起源座·两仪 积分空投计算器</h1>
+
+        <div class="rule-box">
+            <h3>📌 活动规则说明</h3>
+            <p>✅ 空投规则：每满228积分可获得1个【起源座·两仪】，权益可叠加。</p>
+            <p>✅ 快照时间：2026年6月21日 23:59:59，空投将于2026年8月17日前发放。</p>
+            <p>✅ 铸造总量：起源座·两仪共铸造2000份，未达2000份的剩余数量后续将作为活动奖励发放。</p>
+        </div>
+
+        <div class="items-grid">
+            <div class="item-card">
+                <div class="item-name">万象之谜</div>
+                <div class="score-tag">5分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="wanxiang">−</button>
+                    <input type="number" class="count-input" id="wanxiang" value="0" min="0">
+                    <button class="btn plus-btn" data-id="wanxiang">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">第五象限·水星播种</div>
+                <div class="score-tag">5分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="shuixing">−</button>
+                    <input type="number" class="count-input" id="shuixing" value="0" min="0">
+                    <button class="btn plus-btn" data-id="shuixing">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">第五象限·宇宙晶卵</div>
+                <div class="score-tag">5分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="jingluan">−</button>
+                    <input type="number" class="count-input" id="jingluan" value="0" min="0">
+                    <button class="btn plus-btn" data-id="jingluan">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">象限日志·索拉人神迹</div>
+                <div class="score-tag">7分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="suolashenji">−</button>
+                    <input type="number" class="count-input" id="suolashenji" value="0" min="0">
+                    <button class="btn plus-btn" data-id="suolashenji">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">第五象限·幸存者文姬</div>
+                <div class="score-tag">12分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="wenji">−</button>
+                    <input type="number" class="count-input" id="wenji" value="0" min="0">
+                    <button class="btn plus-btn" data-id="wenji">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">第五象限·水星播种索拉人</div>
+                <div class="score-tag">25分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="shuixingsuola">−</button>
+                    <input type="number" class="count-input" id="shuixingsuola" value="0" min="0">
+                    <button class="btn plus-btn" data-id="shuixingsuola">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">浑天</div>
+                <div class="score-tag">30分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="huntian">−</button>
+                    <input type="number" class="count-input" id="huntian" value="0" min="0">
+                    <button class="btn plus-btn" data-id="huntian">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">潮流武装</div>
+                <div class="score-tag">20分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="chaoliu">−</button>
+                    <input type="number" class="count-input" id="chaoliu" value="0" min="0">
+                    <button class="btn plus-btn" data-id="chaoliu">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">创世://宿影基地</div>
+                <div class="score-tag">228分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="suying">−</button>
+                    <input type="number" class="count-input" id="suying" value="0" min="0">
+                    <button class="btn plus-btn" data-id="suying">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="result-title">📊 实时计算结果</div>
+            <div class="result-item">
+                <span class="result-label">当前总积分</span>
+                <span class="result-value" id="total-score">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">藏品总数量</span>
+                <span class="result-value" id="total-num">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">🪐 可空投「起源座·两仪」份数</span>
+                <span class="result-value" id="airdrop-count">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">已使用达标积分</span>
+                <span class="result-value" id="used-score">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">剩余多余积分（可留存）</span>
+                <span class="result-value extra-score" id="extra-score">0</span>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <h3>💡 凑分达标建议</h3>
+            <p id="tip1">距离下一份「起源座·两仪」空投：已达标</p>
+            <p id="tip2">拿下下一份空投预估还需藏品：0 件（按最低5分/件估算）</p>
+        </div>
+
+        <div class="button-group">
+            <button class="action-btn reset-btn" id="reset-btn">一键重置</button>
+            <button class="action-btn calc-btn" id="calc-btn">重新计算</button>
+        </div>
+    </div>
+
+    <script>
+        // 藏品配置
+        const itemsConfig = [
+            { id: 'wanxiang', score: 5 },
+            { id: 'shuixing', score: 5 },
+            { id: 'jingluan', score: 5 },
+            { id: 'suolashenji', score: 7 },
+            { id: 'wenji', score: 12 },
+            { id: 'shuixingsuola', score: 25 },
+            { id: 'huntian', score: 30 },
+            { id: 'chaoliu', score: 20 },
+            { id: 'suying', score: 228 }
+        ];
+
+        const AIRDROP_THRESHOLD = 228; // 每228分1份空投
+        const MIN_SCORE_PER = 5;      // 按最低5分藏品估算件数
+
+        function calculateTotal() {
+            let totalScore = 0;
+            let totalNum = 0;
+
+            itemsConfig.forEach(item => {
+                const count = parseInt(document.getElementById(item.id).value) || 0;
+                totalScore += count * item.score;
+                totalNum += count;
+            });
+
+            document.getElementById('total-score').textContent = totalScore;
+            document.getElementById('total-num').textContent = totalNum;
+
+            // 计算空投份数
+            const airdropCount = Math.floor(totalScore / AIRDROP_THRESHOLD);
+            document.getElementById('airdrop-count').textContent = airdropCount;
+
+            // 已用积分 + 多余剩余积分
+            const usedScore = airdropCount * AIRDROP_THRESHOLD;
+            const extraScore = totalScore - usedScore;
+            document.getElementById('used-score').textContent = usedScore;
+            document.getElementById('extra-score').textContent = extraScore;
+
+            // 还差多少积分
+            const nextThreshold = (airdropCount + 1) * AIRDROP_THRESHOLD;
+            const needScore = nextThreshold - totalScore;
+
+            // 还差几件藏品
+            const needNum = needScore <= 0 ? 0 : Math.ceil(needScore / MIN_SCORE_PER);
+
+            // 提示文案
+            if (needScore <= 0) {
+                document.getElementById('tip1').innerText = "距离下一份「起源座·两仪」空投：已达标，可以冲下一档！";
+                document.getElementById('tip2').innerText = "拿下下一份空投预估还需藏品：已达标";
+            } else {
+                document.getElementById('tip1').innerText = `距离下一份「起源座·两仪」空投：还需 ${needScore} 积分`;
+                document.getElementById('tip2').innerText = `拿下下一份空投预估还需藏品：约 ${needNum} 件（按最低5分/件估算）`;
+            }
+        }
+
+        // 加减按钮事件
+        document.querySelectorAll('.plus-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const input = document.getElementById(id);
+                input.value = parseInt(input.value) + 1;
+                calculateTotal();
+            });
+        });
+
+        document.querySelectorAll('.minus-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const input = document.getElementById(id);
+                if (parseInt(input.value) > 0) {
+                    input.value = parseInt(input.value) - 1;
+                    calculateTotal();
+                }
+            });
+        });
+
+        // 手动输入事件
+        document.querySelectorAll('.count-input').forEach(input => {
+            input.addEventListener('input', function() {
+                let val = parseInt(this.value);
+                if (isNaN(val) || val < 0) this.value = 0;
+                calculateTotal();
+            });
+        });
+
+        // 重置按钮
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            itemsConfig.forEach(item => {
+                document.getElementById(item.id).value = 0;
+            });
+            calculateTotal();
+        });
+
+        // 初始计算
+        calculateTotal();
+    </script>
+</body>
+</html>
