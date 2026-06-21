@@ -248,8 +248,8 @@
         <div class="rule-box">
             <h3>📌 活动规则说明</h3>
             <p>✅ 小全套空投：仅下方【可积分藏品】8款参与积分，每满120分空投《不审定帖》，可叠加。</p>
-            <p>✅ 大全套空投：全部19款藏品各持有至少1件即可空投《小大悉帖》。</p>
-            <p>✅ 【仅计数不计分藏品】共9款：只统计大全套品类数量，不参与任何积分计算。</p>
+            <p>✅ 大全套空投：全部18款藏品各持有至少1件即可空投《小大悉帖》。</p>
+            <p>✅ 【仅计数不计分藏品】共10款：只统计大全套品类数量，不参与任何积分计算。</p>
             <p>✅ 快照时间：2026年6月21日 23:59:59。</p>
         </div>
 
@@ -336,7 +336,7 @@
             </div>
         </div>
 
-        <h3 class="section-title">二、仅用于大全套统计的9款藏品（只计数、不计任何积分）</h3>
+        <h3 class="section-title">二、仅用于大全套统计的10款藏品（只计数、不计任何积分）</h3>
         <div class="items-grid">
             <div class="item-card">
                 <div class="item-name">靛蓝色圆锥形琉璃构件</div>
@@ -411,12 +411,21 @@
                 </div>
             </div>
             <div class="item-card">
-                <div class="item-name">铜鎏金犀牛、青花八宝万福如意纹瓷方砖</div>
+                <div class="item-name">铜鎏金犀牛</div>
                 <div class="count-only-tag">仅计数不计分</div>
                 <div class="input-group">
                     <button class="btn minus-btn" data-id="niuxi">−</button>
                     <input type="number" class="count-input" id="niuxi" value="0" min="0">
                     <button class="btn plus-btn" data-id="niuxi">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">青花八宝万福如意纹瓷方砖</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="cifangzhuan">−</button>
+                    <input type="number" class="count-input" id="cifangzhuan" value="0" min="0">
+                    <button class="btn plus-btn" data-id="cifangzhuan">+</button>
                 </div>
             </div>
         </div>
@@ -432,7 +441,7 @@
                 <span class="result-value" id="total-num">0</span>
             </div>
             <div class="result-item">
-                <span class="result-label">大全套已收集总品类数（目标19类）</span>
+                <span class="result-label">大全套已收集总品类数（目标18类）</span>
                 <span class="result-value full-set" id="full-set-count">0</span>
             </div>
             <div class="result-item">
@@ -457,7 +466,7 @@
             <h3>💡 凑分&大全套集齐建议</h3>
             <p id="tip1">距离下一份《不审定帖》空投：已达标</p>
             <p id="tip2">拿下下一份空投预估还需藏品：0 件（按最低4分/件估算）</p>
-            <p id="tip3">大全套还差 <span id="need-full">19</span> 类藏品即可解锁《小大悉帖》空投资格</p>
+            <p id="tip3">大全套还差 <span id="need-full">18</span> 类藏品即可解锁《小大悉帖》空投资格</p>
         </div>
 
         <div class="button-group">
@@ -479,7 +488,7 @@
             { id: 'shiyu', score: 4 }
         ];
 
-        // 9款仅计数、不计积分的大全套藏品
+        // 10款仅计数、不计积分的大全套藏品
         const countOnlyItems = [
             { id: 'liuli1' },
             { id: 'liuli2' },
@@ -489,12 +498,14 @@
             { id: 'gaozuwan' },
             { id: 'shipingfeng' },
             { id: 'shizhu' },
-            { id: 'niuxi' }
+            { id: 'niuxi' },
+            { id: 'cifangzhuan' }
         ];
 
         const AIRDROP_THRESHOLD = 120;
         const MIN_SCORE_PER = 4;
-        const FULL_SET_TOTAL = 19;
+        // 修正：官方一共18类藏品
+        const FULL_SET_TOTAL = 18;
 
         function calculateTotal() {
             let totalScore = 0;
