@@ -193,6 +193,9 @@
         .full-set{
             color:#6c2bd9;
         }
+        .total-all{
+            color:#2385bb;
+        }
 
         .button-group {
             display: grid;
@@ -444,6 +447,11 @@
                 <span class="result-label">大全套已收集总品类数（目标18类）</span>
                 <span class="result-value full-set" id="full-set-count">0</span>
             </div>
+            <!-- 新增：所有藏品总持有数量 -->
+            <div class="result-item">
+                <span class="result-label">全部藏品总持有件数（大全套所有品类合计）</span>
+                <span class="result-value total-all" id="all-total-count">0</span>
+            </div>
             <div class="result-item">
                 <span class="result-label">可空投《不审定帖》份数</span>
                 <span class="result-value" id="airdrop-count">0</span>
@@ -504,31 +512,36 @@
 
         const AIRDROP_THRESHOLD = 120;
         const MIN_SCORE_PER = 4;
-        // 修正：官方一共18类藏品
         const FULL_SET_TOTAL = 18;
 
         function calculateTotal() {
             let totalScore = 0;
             let totalNum = 0;
             let fullSetTypeCount = 0;
+            // 新增：所有藏品总件数
+            let allTotalCount = 0;
 
-            // 统计可积分藏品：算积分+算大全套品类
+            // 统计可积分藏品：算积分+算大全套品类+累加总件数
             scoreItems.forEach(item => {
                 const count = parseInt(document.getElementById(item.id).value) || 0;
                 totalScore += count * item.score;
                 totalNum += count;
+                allTotalCount += count;
                 if (count >= 1) fullSetTypeCount++;
             });
 
-            // 仅计数藏品：只统计大全套品类，不计算任何积分
+            // 仅计数藏品：只统计大全套品类 + 累加总件数，不计算任何积分
             countOnlyItems.forEach(item => {
                 const count = parseInt(document.getElementById(item.id).value) || 0;
+                allTotalCount += count;
                 if (count >= 1) fullSetTypeCount++;
             });
 
             document.getElementById('total-score').textContent = totalScore;
             document.getElementById('total-num').textContent = totalNum;
             document.getElementById('full-set-count').textContent = fullSetTypeCount;
+            // 赋值全部藏品总数量
+            document.getElementById('all-total-count').textContent = allTotalCount;
 
             const needFullType = FULL_SET_TOTAL - fullSetTypeCount;
             document.getElementById('need-full').textContent = needFullType;
