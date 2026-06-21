@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字圆明 大全套+小全套积分计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6073 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rule-box, .tip-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tip-box {
+            background-color: #fff8e8;
+            border-left: 5px solid #c0392b;
+        }
+
+        .rule-box h3, .tip-box h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-box p, .tip-box p {
+            color: #34495e;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 6px 0;
+        }
+
+        .section-title {
+            color: #fff;
+            margin: 24px 0 12px;
+            font-size: 18px;
+            padding-left: 6px;
+            border-left: 4px solid #ffd343;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .item-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .score-tag {
+            background-color: #8b2323;
+            color: white;
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .count-only-tag {
+            background-color: #555;
+            color: white;
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffd343;
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #ffc107;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .count-input {
+            width: 80px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .result-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #34495e;
+            font-size: 16px;
+        }
+
+        .result-value {
+            color: #c0392b;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .extra-score{
+            color:#27ae60;
+        }
+        .full-set{
+            color:#6c2bd9;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #ee5253;
+        }
+
+        .calc-btn {
+            background-color: #1dd1a1;
+            color: white;
+        }
+
+        .calc-btn:hover {
+            background-color: #10ac84;
+        }
+
+        @media (max-width: 600px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ 数字圆明 大全套+小全套积分计算器</h1>
+
+        <div class="rule-box">
+            <h3>📌 活动规则说明</h3>
+            <p>✅ 小全套空投：仅下方【可积分藏品】8款参与积分，每满120分空投《不审定帖》，可叠加。</p>
+            <p>✅ 大全套空投：全部19款藏品各持有至少1件即可空投《小大悉帖》。</p>
+            <p>✅ 【仅计数不计分藏品】共9款：只统计大全套品类数量，不参与任何积分计算。</p>
+            <p>✅ 快照时间：2026年6月21日 23:59:59。</p>
+        </div>
+
+        <h3 class="section-title">一、可参与小全套积分的8款藏品（同时计入大全套品类）</h3>
+        <div class="items-grid">
+            <div class="item-card">
+                <div class="item-name">万花阵</div>
+                <div class="score-tag">7分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="wanhuazhen">−</button>
+                    <input type="number" class="count-input" id="wanhuazhen" value="0" min="0">
+                    <button class="btn plus-btn" data-id="wanhuazhen">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">圆明园马首铜像</div>
+                <div class="score-tag">7分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="mashou">−</button>
+                    <input type="number" class="count-input" id="mashou" value="0" min="0">
+                    <button class="btn plus-btn" data-id="mashou">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">金漆龙雕宝座</div>
+                <div class="score-tag">6分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="new-goods">−</button>
+                    <input type="number" class="count-input" id="new-goods" value="0" min="0">
+                    <button class="btn plus-btn" data-id="new-goods">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">远瀛观</div>
+                <div class="score-tag">5分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="yuanyingguan">−</button>
+                    <input type="number" class="count-input" id="yuanyingguan" value="0" min="0">
+                    <button class="btn plus-btn" data-id="yuanyingguan">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">大水法遗址</div>
+                <div class="score-tag">5分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="dashuifa">−</button>
+                    <input type="number" class="count-input" id="dashuifa" value="0" min="0">
+                    <button class="btn plus-btn" data-id="dashuifa">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">铜鎏金象首</div>
+                <div class="score-tag">4分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="xiangshou">−</button>
+                    <input type="number" class="count-input" id="xiangshou" value="0" min="0">
+                    <button class="btn plus-btn" data-id="xiangshou">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">海晏堂西侧水法石雕贝壳</div>
+                <div class="score-tag">4分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="beike">−</button>
+                    <input type="number" class="count-input" id="beike" value="0" min="0">
+                    <button class="btn plus-btn" data-id="beike">+</button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-name">大水法翻尾石鱼</div>
+                <div class="score-tag">4分/件</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="shiyu">−</button>
+                    <input type="number" class="count-input" id="shiyu" value="0" min="0">
+                    <button class="btn plus-btn" data-id="shiyu">+</button>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">二、仅用于大全套统计的9款藏品（只计数、不计任何积分）</h3>
+        <div class="items-grid">
+            <div class="item-card">
+                <div class="item-name">靛蓝色圆锥形琉璃构件</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="liuli1">−</button>
+                    <input type="number" class="count-input" id="liuli1" value="0" min="0">
+                    <button class="btn plus-btn" data-id="liuli1">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">绿色贝壳形琉璃构件</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="liuli2">−</button>
+                    <input type="number" class="count-input" id="liuli2" value="0" min="0">
+                    <button class="btn plus-btn" data-id="liuli2">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">马首人身雕像</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="mashourenshen">−</button>
+                    <input type="number" class="count-input" id="mashourenshen" value="0" min="0">
+                    <button class="btn plus-btn" data-id="mashourenshen">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">长春园铜麒麟</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="qilin">−</button>
+                    <input type="number" class="count-input" id="qilin" value="0" min="0">
+                    <button class="btn plus-btn" data-id="qilin">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">铜胎珐琅云龙纹香筒</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="xiangtong">−</button>
+                    <input type="number" class="count-input" id="xiangtong" value="0" min="0">
+                    <button class="btn plus-btn" data-id="xiangtong">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">乾隆梵文青花高足碗</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="gaozuwan">−</button>
+                    <input type="number" class="count-input" id="gaozuwan" value="0" min="0">
+                    <button class="btn plus-btn" data-id="gaozuwan">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">观水法石屏风-主屏</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="shipingfeng">−</button>
+                    <input type="number" class="count-input" id="shipingfeng" value="0" min="0">
+                    <button class="btn plus-btn" data-id="shipingfeng">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">谐奇趣中西合璧石柱</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="shizhu">−</button>
+                    <input type="number" class="count-input" id="shizhu" value="0" min="0">
+                    <button class="btn plus-btn" data-id="shizhu">+</button>
+                </div>
+            </div>
+            <div class="item-card">
+                <div class="item-name">铜鎏金犀牛、青花八宝万福如意纹瓷方砖</div>
+                <div class="count-only-tag">仅计数不计分</div>
+                <div class="input-group">
+                    <button class="btn minus-btn" data-id="niuxi">−</button>
+                    <input type="number" class="count-input" id="niuxi" value="0" min="0">
+                    <button class="btn plus-btn" data-id="niuxi">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="result-title">📊 实时计算结果</div>
+            <div class="result-item">
+                <span class="result-label">小全套当前总积分</span>
+                <span class="result-value" id="total-score">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">小全套持仓藏品总件数</span>
+                <span class="result-value" id="total-num">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">大全套已收集总品类数（目标19类）</span>
+                <span class="result-value full-set" id="full-set-count">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">可空投《不审定帖》份数</span>
+                <span class="result-value" id="airdrop-count">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">已使用达标积分</span>
+                <span class="result-value" id="used-score">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">剩余多余积分（可留存）</span>
+                <span class="result-value extra-score" id="extra-score">0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">是否满足大全套《小大悉帖》空投条件</span>
+                <span class="result-value full-set" id="full-set-qualify">否</span>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <h3>💡 凑分&大全套集齐建议</h3>
+            <p id="tip1">距离下一份《不审定帖》空投：已达标</p>
+            <p id="tip2">拿下下一份空投预估还需藏品：0 件（按最低4分/件估算）</p>
+            <p id="tip3">大全套还差 <span id="need-full">19</span> 类藏品即可解锁《小大悉帖》空投资格</p>
+        </div>
+
+        <div class="button-group">
+            <button class="action-btn reset-btn" id="reset-btn">一键重置</button>
+            <button class="action-btn calc-btn" id="calc-btn">重新计算</button>
+        </div>
+    </div>
+
+    <script>
+        // 8款可积分藏品（同时计入大全套品类）
+        const scoreItems = [
+            { id: 'wanhuazhen', score: 7 },
+            { id: 'mashou', score: 7 },
+            { id: 'new-goods', score: 6 },
+            { id: 'yuanyingguan', score: 5 },
+            { id: 'dashuifa', score: 5 },
+            { id: 'xiangshou', score: 4 },
+            { id: 'beike', score: 4 },
+            { id: 'shiyu', score: 4 }
+        ];
+
+        // 9款仅计数、不计积分的大全套藏品
+        const countOnlyItems = [
+            { id: 'liuli1' },
+            { id: 'liuli2' },
+            { id: 'mashourenshen' },
+            { id: 'qilin' },
+            { id: 'xiangtong' },
+            { id: 'gaozuwan' },
+            { id: 'shipingfeng' },
+            { id: 'shizhu' },
+            { id: 'niuxi' }
+        ];
+
+        const AIRDROP_THRESHOLD = 120;
+        const MIN_SCORE_PER = 4;
+        const FULL_SET_TOTAL = 19;
+
+        function calculateTotal() {
+            let totalScore = 0;
+            let totalNum = 0;
+            let fullSetTypeCount = 0;
+
+            // 统计可积分藏品：算积分+算大全套品类
+            scoreItems.forEach(item => {
+                const count = parseInt(document.getElementById(item.id).value) || 0;
+                totalScore += count * item.score;
+                totalNum += count;
+                if (count >= 1) fullSetTypeCount++;
+            });
+
+            // 仅计数藏品：只统计大全套品类，不计算任何积分
+            countOnlyItems.forEach(item => {
+                const count = parseInt(document.getElementById(item.id).value) || 0;
+                if (count >= 1) fullSetTypeCount++;
+            });
+
+            document.getElementById('total-score').textContent = totalScore;
+            document.getElementById('total-num').textContent = totalNum;
+            document.getElementById('full-set-count').textContent = fullSetTypeCount;
+
+            const needFullType = FULL_SET_TOTAL - fullSetTypeCount;
+            document.getElementById('need-full').textContent = needFullType;
+            document.getElementById('full-set-qualify').textContent = fullSetTypeCount >= FULL_SET_TOTAL ? '是' : '否';
+
+            // 小全套空投计算
+            const airdropCount = Math.floor(totalScore / AIRDROP_THRESHOLD);
+            document.getElementById('airdrop-count').textContent = airdropCount;
+
+            const usedScore = airdropCount * AIRDROP_THRESHOLD;
+            const extraScore = totalScore - usedScore;
+            document.getElementById('used-score').textContent = usedScore;
+            document.getElementById('extra-score').textContent = extraScore;
+
+            const nextThreshold = (airdropCount + 1) * AIRDROP_THRESHOLD;
+            const needScore = nextThreshold - totalScore;
+            const needNum = needScore <= 0 ? 0 : Math.ceil(needScore / MIN_SCORE_PER);
+
+            if (needScore <= 0) {
+                document.getElementById('tip1').innerText = "距离下一份《不审定帖》空投：已达标，可以冲下一档！";
+                document.getElementById('tip2').innerText = "拿下下一份空投预估还需藏品：已达标";
+            } else {
+                document.getElementById('tip1').innerText = `距离下一份《不审定帖》空投：还需 ${needScore} 积分`;
+                document.getElementById('tip2').innerText = `拿下下一份空投预估还需藏品：约 ${needNum} 件（按最低4分/件估算）`;
+            }
+        }
+
+        // 绑定所有加减按钮
+        document.querySelectorAll('.plus-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const input = document.getElementById(id);
+                input.value = parseInt(input.value) + 1;
+                calculateTotal();
+            });
+        });
+
+        document.querySelectorAll('.minus-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const input = document.getElementById(id);
+                if (parseInt(input.value) > 0) {
+                    input.value = parseInt(input.value) - 1;
+                    calculateTotal();
+                }
+            });
+        });
+
+        // 手动输入监听
+        document.querySelectorAll('.count-input').forEach(input => {
+            input.addEventListener('input', function () {
+                let val = parseInt(this.value);
+                if (isNaN(val) || val < 0) this.value = 0;
+                calculateTotal();
+            });
+        });
+
+        // 一键重置
+        document.getElementById('reset-btn').addEventListener('click', function () {
+            [...scoreItems, ...countOnlyItems].forEach(item => {
+                document.getElementById(item.id).value = 0;
+            });
+            calculateTotal();
+        });
+
+        calculateTotal();
+    </script>
+</body>
+</html>
